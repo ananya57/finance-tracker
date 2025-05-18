@@ -1,58 +1,48 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
-  const navigate = useNavigate();  // useNavigate hook
-  const [email, setEmail] = useState("");
+function Login() {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
+    const savedUsername = localStorage.getItem("username");
+    const savedPassword = localStorage.getItem("password");
 
-    const res = await fetch("http://localhost:5000/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
+    if (username === savedUsername && password === savedPassword) {
       alert("Login successful!");
-      navigate("/");  // Redirect to home page after success
+      navigate("/home");  // Redirect to Home after login
     } else {
-      alert(data.message || "Invalid credentials");
+      alert("Invalid username or password");
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
+    <div style={{ maxWidth: 400, margin: "auto", padding: 20, border: "1px solid #ccc", borderRadius: 8, boxShadow: "0 0 10px #ccc" }}>
+      <h2 style={{ textAlign: "center", marginBottom: 20 }}>Login</h2>
       <form onSubmit={handleLogin}>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            placeholder="Enter password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Login</button>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          style={{ width: "100%", marginBottom: 15, padding: 10, fontSize: 16, borderRadius: 4, border: "1px solid #ddd" }}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          style={{ width: "100%", marginBottom: 15, padding: 10, fontSize: 16, borderRadius: 4, border: "1px solid #ddd" }}
+        />
+        <button type="submit" style={{ width: "100%", padding: 12, fontSize: 16, backgroundColor: "#004080", color: "white", border: "none", borderRadius: 4, cursor: "pointer" }}>
+          Login
+        </button>
       </form>
     </div>
   );
-};
+}
 
 export default Login;

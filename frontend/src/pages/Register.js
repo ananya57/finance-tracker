@@ -1,69 +1,47 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-const Register = () => {
-  const navigate = useNavigate();  // useNavigate hook
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+function Register() {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
-
-    const res = await fetch("http://localhost:5000/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
+    if (username && password) {
+      localStorage.setItem("username", username);
+      localStorage.setItem("password", password);
       alert("Registered successfully!");
-      navigate("/login");  // Redirect to login page after success
+      navigate("/login");
     } else {
-      alert(data.message || "Error during registration");
+      alert("Please fill both fields");
     }
   };
 
   return (
-    <div>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name</label>
-          <input
-            type="text"
-            placeholder="Enter name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            placeholder="Enter password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Register</button>
+    <div style={{ maxWidth: 400, margin: "auto", padding: 20, border: "1px solid #ccc", borderRadius: 8, boxShadow: "0 0 10px #ccc" }}>
+      <h2 style={{ textAlign: "center", marginBottom: 20 }}>Register</h2>
+      <form onSubmit={handleRegister}>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          style={{ width: "100%", marginBottom: 15, padding: 10, fontSize: 16, borderRadius: 4, border: "1px solid #ddd" }}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          style={{ width: "100%", marginBottom: 15, padding: 10, fontSize: 16, borderRadius: 4, border: "1px solid #ddd" }}
+        />
+        <button type="submit" style={{ width: "100%", padding: 12, fontSize: 16, backgroundColor: "#004080", color: "white", border: "none", borderRadius: 4, cursor: "pointer" }}>
+          Register
+        </button>
       </form>
     </div>
   );
-};
+}
 
 export default Register;

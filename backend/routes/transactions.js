@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 
-// Transaction Schema
 const transactionSchema = new mongoose.Schema({
   amount: Number,
   type: String,
@@ -12,7 +11,6 @@ const transactionSchema = new mongoose.Schema({
 
 const Transaction = mongoose.model("Transaction", transactionSchema);
 
-// POST route to add transaction
 router.post("/", async (req, res) => {
   try {
     const { amount, type, category, note } = req.body;
@@ -24,7 +22,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-// GET route to fetch all transactions
 router.get("/", async (req, res) => {
   try {
     const transactions = await Transaction.find();
